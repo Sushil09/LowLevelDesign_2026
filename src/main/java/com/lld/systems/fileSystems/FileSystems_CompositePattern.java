@@ -6,7 +6,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileSystems_CommandPattern {
+public class FileSystems_CompositePattern {
     public static void main(String[] args) {
         //Sample Examples
         File movieFile = new File();
