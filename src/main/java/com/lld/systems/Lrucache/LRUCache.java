@@ -36,10 +36,10 @@ public class LRUCache {
 }
 
 class Cache {
-    private Map<Object, Node> cacheMap;
-    private Node head;
-    private Node tail;
-    private int size;
+    private final Map<Object, Node> cacheMap;
+    private final Node head;
+    private final Node tail;
+    private final int size;
 
     Cache(int size) {
         this.size = size;
