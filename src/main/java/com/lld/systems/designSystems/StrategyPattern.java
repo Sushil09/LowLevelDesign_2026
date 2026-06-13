@@ -28,7 +28,7 @@ public class StrategyPattern {
             case 2:
                 System.out.println("Please enter your phoneNumber");
                 String phone = scanner.nextLine();
-                client = new PaymentClient(new UPIdPayment(phone,"xyz.com"));
+                client = new PaymentClient(new UPIdPayment("xyz.com",phone));
                 break;
             case 3:
                 client = new PaymentClient(new CashPayment());
