@@ -1,5 +1,8 @@
 package com.lld.systems.designSystems;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class StatePattern {
     public static void main(String[] args) {
         VendingMachine vendingMachine = new VendingMachine();
@@ -11,9 +14,41 @@ public class StatePattern {
 
 
 interface VendingMachineState {
-    void insertCoin(VendingMachine machine);
-    void selectItem(VendingMachine machine);
-    void dispenseItem(VendingMachine machine);
+    void insertCoin();
+    void selectItem();
+    void dispenseItem();
+}
+
+class VendingMachine {
+
+    @Setter
+    private VendingMachineState state;
+    @Getter
+    private InsertCoinState insertCoinState;
+    @Getter
+    private SelectItemState selectItemState;
+    @Getter
+    private DispenseItemState dispenseItemState;
+
+    public VendingMachine() {
+        insertCoinState = new InsertCoinState(this);
+        selectItemState = new SelectItemState(this);
+        dispenseItemState = new DispenseItemState(this);
+        state = insertCoinState;
+    }
+
+    public void insertCoin() {
+        state.insertCoin();
+    }
+
+    public void selectItem() {
+        state.selectItem();
+    }
+
+    public void dispenseItem() {
+        state.dispenseItem();
+    }
+
 }
 
 class InsertCoinState implements VendingMachineState {
@@ -25,18 +60,18 @@ class InsertCoinState implements VendingMachineState {
     }
 
     @Override
-    public void insertCoin(VendingMachine machine) {
+    public void insertCoin() {
         System.out.println("Coin inserted");
-        machine.setState(new SelectItemState(machine));
+        machine.setState(machine.getSelectItemState());
     }
 
     @Override
-    public void selectItem(VendingMachine machine) {
+    public void selectItem() {
         System.out.println("Please insert coin first");
     }
 
     @Override
-    public void dispenseItem(VendingMachine machine) {
+    public void dispenseItem() {
         System.out.println("Please insert coin first");
     }
 }
@@ -50,18 +85,18 @@ class SelectItemState implements VendingMachineState {
     }
 
     @Override
-    public void insertCoin(VendingMachine machine) {
+    public void insertCoin() {
         System.out.println("Coin is already inserted");
     }
 
     @Override
-    public void selectItem(VendingMachine machine) {
+    public void selectItem() {
         System.out.println("Select the item");
-        machine.setState(new DispenseItemState(machine));
+        machine.setState(machine.getDispenseItemState());
     }
 
     @Override
-    public void dispenseItem(VendingMachine machine) {
+    public void dispenseItem() {
         System.out.println("Please select the item First");
     }
 }
@@ -75,44 +110,20 @@ class DispenseItemState implements VendingMachineState {
     }
 
     @Override
-    public void insertCoin(VendingMachine machine) {
+    public void insertCoin() {
         System.out.println("Coin is already inserted");
     }
 
     @Override
-    public void selectItem(VendingMachine machine) {
+    public void selectItem() {
         System.out.println("Items is already being dispensed now");
     }
 
     @Override
-    public void dispenseItem(VendingMachine machine) {
-        System.out.println("Dispensing the item");
-        machine.setState(new InsertCoinState(machine));
-    }
-}
-
-class VendingMachine {
-
-    VendingMachineState state;
-
-    public VendingMachine() {
-        this.state = new InsertCoinState(this);
-    }
-
-    public void setState(VendingMachineState state) {
-        this.state = state;
-    }
-
-    public void insertCoin() {
-        state.insertCoin(this);
-    }
-
-    public void selectItem() {
-        state.selectItem(this);
-    }
-
     public void dispenseItem() {
-        state.dispenseItem(this);
+        System.out.println("Dispensing the item");
+        machine.setState(machine.getInsertCoinState());
     }
-
 }
+
+
